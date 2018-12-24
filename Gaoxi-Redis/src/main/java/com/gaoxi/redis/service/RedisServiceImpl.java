@@ -6,6 +6,8 @@ package com.gaoxi.redis.service;
  * @description
  */
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -77,11 +79,11 @@ public class RedisServiceImpl implements RedisService {
      * @return
      */
     @Override
-    public Object get(final String key) {
+    public Serializable get(final String key) {
         Object result = null;
         ValueOperations<Serializable, Object> operations = redisTemplate.opsForValue();
         result = operations.get(key);
-        return result;
+        return result.toString();
     }
 
     /**
@@ -92,7 +94,7 @@ public class RedisServiceImpl implements RedisService {
      * @return
      */
     @Override
-    public boolean set(final String key, Object value) {
+    public boolean set(final String key, Serializable value) {
         boolean result = false;
         try {
             ValueOperations<Serializable, Object> operations = redisTemplate.opsForValue();
@@ -112,7 +114,7 @@ public class RedisServiceImpl implements RedisService {
      * @return
      */
     @Override
-    public boolean set(final String key, Object value, Long expireTime) {
+    public boolean set(final String key, Serializable value, Long expireTime) {
         boolean result = false;
         try {
             ValueOperations<Serializable, Object> operations = redisTemplate.opsForValue();
@@ -123,5 +125,91 @@ public class RedisServiceImpl implements RedisService {
             e.printStackTrace();
         }
         return result;
+    }
+
+    /**
+     * 存储map
+     * @param key
+     * @param map
+     * @param expireTime 失效时间为null则永久生效（单位秒）
+     * @return
+     */
+    @Override
+    public <K,HK,HV> boolean setMap(K key, Map<HK, HV> map, Long expireTime){
+        return true;
+    }
+
+
+    /**
+     * 获取map
+     * @param key
+     * @param <K>
+     * @param <HK>
+     * @param <HV>
+     * @return
+     */
+    @Override
+    public <K,HK,HV> Map<HK,HV> getMap(final K key){
+        return  new Map<HK, HV>() {
+            @Override
+            public int size() {
+                return 0;
+            }
+
+            @Override
+            public boolean isEmpty() {
+                return false;
+            }
+
+            @Override
+            public boolean containsKey(Object key) {
+                return false;
+            }
+
+            @Override
+            public boolean containsValue(Object value) {
+                return false;
+            }
+
+            @Override
+            public HV get(Object key) {
+                return null;
+            }
+
+            @Override
+            public HV put(HK key, HV value) {
+                return null;
+            }
+
+            @Override
+            public HV remove(Object key) {
+                return null;
+            }
+
+            @Override
+            public void putAll(Map<? extends HK, ? extends HV> m) {
+
+            }
+
+            @Override
+            public void clear() {
+
+            }
+
+            @Override
+            public Set<HK> keySet() {
+                return null;
+            }
+
+            @Override
+            public Collection<HV> values() {
+                return null;
+            }
+
+            @Override
+            public Set<Entry<HK, HV>> entrySet() {
+                return null;
+            }
+        };
     }
 }
